@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  day_month: MyString
+  year: MyString
+  content: MyText
+  main_event: false
+
+two:
+  day_month: MyString
+  year: MyString
+  content: MyText
+  main_event: false
