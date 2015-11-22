@@ -7,18 +7,19 @@ class Crawler
     months.each do |month|
       days.each do |day|
         page_url =  "#{url}/#{month}/#{day}"
-        page = agent.get(page_url) rescue break
+        page = agent.get(page_url) rescue next
         contents = page.at("#mw-content-text")
-        main_event = contents.at("p").text
-        History.create day_month: "#{day}/#{month}", year: nil , content: main_event, main_event: true
+        contents.at("p > b").remove rescue Exception
+        main_event = contents.at("p").text rescue Exception
+        main_event.slice!(0)
+        History.create day_month: "#{day}/#{month}", year: nil , content: main_event.strip, main_event: true
         contents.search("li").each do |event|
-          year = event.at("a").text rescue ""
-          content = event.text
-          History.create day_month: "#{day}/#{month}", year: year , content: content, main_event: false
-        end
-        # l = page.at("#mw-content-text > .show-image").at("a")
-        # link = Mechanize::Page::Link.new(l, agent, page)
-        # link.click.images.second.fetch.save_as("#{day}_#{month}.png") rescue "Failed!"
+          year = event.at("a").text rescue Exception
+          event.at("a").remove rescue Exception
+          content = event.text rescue Exception
+          content.slice!(1)
+          History.create day_month: "#{day}/#{month}", year: year , content: content.strip, main_event: false
+        end rescue next
       end
     end
   end
