@@ -4,6 +4,7 @@ class Crawler
     url = "https://vi.wikipedia.org/wiki/Wikipedia:Ngày_này_năm_xưa"
     months = ("01".."12")
     days = ("01".."31")
+    History.destroy_all
     months.each do |month|
       days.each do |day|
         page_url =  "#{url}/#{month}/#{day}"
